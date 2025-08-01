@@ -11,4 +11,7 @@ export interface Repo {
   updated_at: string
   visibility: string
   default_branch: string
+  owner: {
+    login: string
+  }
 }

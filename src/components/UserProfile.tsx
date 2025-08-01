@@ -1,4 +1,4 @@
-import { MapPin, LinkIcon, Building, Users, BookOpen } from "lucide-react"
+import { MapPin, Building, Users, BookOpen } from "lucide-react"
 import type { User } from "../types/User"
 
 interface Props {

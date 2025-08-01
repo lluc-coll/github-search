@@ -24,3 +24,11 @@ export const fetchUserRepos = async (username: string) => {
   }
   return response.json();
 };
+
+export const fetchRepoCommits = async (owner: string, repo: string) => {
+  const response = await fetch(`${baseUrl}/repos/${owner}/${repo}/commits`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch repository commits');
+  }
+  return response.json();
+};

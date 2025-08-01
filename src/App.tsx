@@ -2,7 +2,7 @@ import { useState } from "react";
 import SearchForm from "./components/SearchForm";
 import { fetchUserRepos, fetchUserProfile, searchUser } from "./services/githubApi";
 import type { Repo } from "./types/Repo";
-import RepoItem from "./components/RepoItem";
+import RepoList from "./components/RepoList";
 import UserProfile from "./components/UserProfile";
 import type { User } from "./types/User";
 import type { UserSearch } from "./types/UserSearch";
@@ -59,18 +59,7 @@ export default function App() {
 
           <div className="flex-1">
             {repos.length > 0 && (
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold text-gray-900">Repositories ({repos.length})</h2>
-                  <div className="text-sm text-gray-600">Sorted by recently updated</div>
-                </div>
-
-                <div className="space-y-3">
-                  {repos.map((repo) => (
-                    <RepoItem key={repo.id} repo={repo} />
-                  ))}
-                </div>
-              </div>
+              <RepoList repos={repos} />
             )}
 
             {(!user || repos.length === 0) && otherUsers.length > 0 && (
