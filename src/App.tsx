@@ -1,20 +1,34 @@
 import { useState } from "react";
 import SearchForm from "./components/SearchForm";
-import { fetchUserRepos } from "./services/githubApi";
+import { fetchUserRepos, fetchUserProfile, searchUser } from "./services/githubApi";
 import type { Repo } from "./types/Repo";
 import RepoItem from "./components/RepoItem";
+import UserProfile from "./components/UserProfile";
+import type { User } from "./types/User";
+import type { UserSearch } from "./types/UserSearch";
+import UserItems from "./components/UserItems";
 
 export default function App() {
   const [repos, setRepos] = useState<Repo[]>([]);
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState("");
+  const [username, setUsername] = useState("");
+  const [user, setUser] = useState<User | null>(null);
+  const [otherUsers, setOtherUsers] = useState<UserSearch[]>([]);
 
   const handleSearch = async (username: string) => {
     setLoading(true);
-    setUser("");
+    setUsername(username);
+    setUser(null);
+    setRepos([]);
+    setOtherUsers([]);
     try {
       const data = await fetchUserRepos(username);
       setRepos(data);
+      const userProfile = await fetchUserProfile(username);
+      setUser(userProfile);
+      const otherUsersData = await searchUser(username);
+      setOtherUsers(otherUsersData.items || []);
+      console.log("Other users found:", otherUsers);
     } catch (err) {
     } finally {
       setLoading(false);
@@ -31,7 +45,7 @@ export default function App() {
           <p className="text-gray-600">Search for GitHub users and explore their repositories</p>
         </div>
 
-        <SearchForm onSearch={handleSearch} />
+        <SearchForm currentUser={username} onSearch={handleSearch} />
 
         {loading && (
           <div className="flex items-center justify-center py-12">
@@ -40,28 +54,42 @@ export default function App() {
           </div>
         )}
 
-        {/*user && <UserProfile user={user} />*/}
+        {user && <UserProfile user={user} />}
+        <div className="flex flex-col lg:flex-row gap-6">
 
-        {repos.length > 0 && (
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold text-gray-900">Repositories ({repos.length})</h2>
-              <div className="text-sm text-gray-600">Sorted by recently updated</div>
-            </div>
+          <div className="flex-1">
+            {repos.length > 0 && (
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-semibold text-gray-900">Repositories ({repos.length})</h2>
+                  <div className="text-sm text-gray-600">Sorted by recently updated</div>
+                </div>
 
-            <div className="space-y-3">
-              {repos.map((repo) => (
-                <RepoItem key={repo.id} repo={repo} />
-              ))}
-            </div>
+                <div className="space-y-3">
+                  {repos.map((repo) => (
+                    <RepoItem key={repo.id} repo={repo} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {(!user || repos.length === 0) && otherUsers.length > 0 && (
+              <UserItems
+                otherUsers={otherUsers}
+                onUserSelect={handleSearch}
+                sidebar={false} />
+            )}
+
           </div>
-        )}
 
-        {/*repos.length === 0 && !loading && !error && user && (
-          <div className="text-center py-12">
-            <p className="text-gray-500">No public repositories found.</p>
-          </div>
-        )*/}
+          {(user && otherUsers.length > 0 && repos.length > 0) && (
+            <UserItems
+              otherUsers={otherUsers}
+              onUserSelect={handleSearch}
+              sidebar={true} />
+          )}
+
+        </div>
       </div>
     </div>
   );
