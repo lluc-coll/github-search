@@ -27,7 +27,7 @@ A responsive web app to search and filter GitHub repositories by username, name,
 - Tailwind CSS
 - Vite for development/build
 - Deployable with Docker
-[Avaliable Here](https://githubTestApp.columbias.cat/)
+[Avaliable Here](https://githubtest.columbias.cat/)
 
 
 ## 🚀 Getting Started
