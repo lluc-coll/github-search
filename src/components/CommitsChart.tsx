@@ -21,17 +21,21 @@ interface Props {
     fetch: boolean;
 }
 
+// This component displays a chart of commits over time for a given repository.
+// It fetches commit data from the GitHub API and processes it to display a line chart  
+// showing the number of commits per day since the repository was created until today.
+// The chart is rendered using the chartjs
 export default function CommitsChart({ login, repo, fetch }: Props) {
     const [commits, setCommits] = useState<Commit[]>([]);
 
     useEffect(() => {
-        if (!fetch) return;
+        if (!fetch) return; // Only fetch commits if the fetch prop is true, to reduce unnecessary API calls
         const fetchCommits = async () => {
             const rawData = await fetchRepoCommits(login, repo.name);
             const parsedData: Commit[] = rawData.map((item: any) => ({
                 commit: {
                     author: {
-                        date: new Date(item.commit.author.date),
+                        date: new Date(item.commit.author.date), // Convert string to Date object
                     }
                 }
             }));
@@ -50,12 +54,14 @@ export default function CommitsChart({ login, repo, fetch }: Props) {
         const start = new Date(repo.created_at);
         const end = new Date();
 
+        // Start "counts" with all dates from repo creation to today
         while (start <= end) {
             const isoDay = start.toISOString().slice(0, 10);
             counts[isoDay] = 0;
             start.setUTCDate(start.getUTCDate() + 1);
         }
 
+        // Count commits for each day in the fetched commits
         commits.forEach(({ commit }) => {
             const day = commit.author.date.toISOString().slice(0, 10);
             counts[day] = (counts[day] || 0) + 1;
@@ -72,8 +78,6 @@ export default function CommitsChart({ login, repo, fetch }: Props) {
 
     const { labels, data } = groupCommitsByDate(commits);
 
-    console.log(data)
-
     const chartData = {
         labels,
         datasets: [
@@ -86,6 +90,7 @@ export default function CommitsChart({ login, repo, fetch }: Props) {
         ],
     };
 
+    // Chart options to hide dots, legend and elements
     const chartOptions = {
         plugins: {
             legend: { display: false },
@@ -104,8 +109,6 @@ export default function CommitsChart({ login, repo, fetch }: Props) {
 
 
     return (
-
         <Line data={chartData} options={chartOptions} />
-
     );
 }

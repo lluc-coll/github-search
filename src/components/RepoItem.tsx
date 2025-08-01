@@ -8,9 +8,13 @@ interface Props {
   repo: Repo;
 }
 
+// This component displays a single repository item with its details and an optional commit graph.
+// It includes the repository name, description, language, stars, forks, last updated date,
+// and a button to toggle the visibility of the commit graph.
 export default function RepoItem({ repo }: Props) {
-  const [showGraph, setShowGraph] = useState(false);
+  const [showGraph, setShowGraph] = useState(false); // State to control the visibility of the commit graph
 
+  // Uses github colorCodes to get the color for the repository language.
   const getLanguageColor = (language: string | null) => {
     if (!language || !Colors[language as keyof typeof Colors]) {
       return "#000000";

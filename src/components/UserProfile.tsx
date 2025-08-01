@@ -5,6 +5,7 @@ interface Props {
   user: User
 }
 
+// This component displays a user's profile information including their avatar, name, bio, company, location, followers, following, and public repositories.
 export default function UserProfile({ user }: Props) {
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">

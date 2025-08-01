@@ -9,12 +9,14 @@ import type { UserSearch } from "./types/UserSearch";
 import UserItems from "./components/UserItems";
 
 export default function App() {
-  const [repos, setRepos] = useState<Repo[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [username, setUsername] = useState("");
-  const [user, setUser] = useState<User | null>(null);
-  const [otherUsers, setOtherUsers] = useState<UserSearch[]>([]);
+  const [repos, setRepos] = useState<Repo[]>([]); // Current user's repositories
+  const [loading, setLoading] = useState(false);  // Loading state for async operations
+  const [username, setUsername] = useState(""); // Current username being searched
+  const [user, setUser] = useState<User | null>(null); // Current user's profile information
+  const [otherUsers, setOtherUsers] = useState<UserSearch[]>([]); // List of other users found in the search
 
+  // Function to handle search input and fetch data
+  // It updates the state with the fetched repositories, user profile, and other users
   const handleSearch = async (username: string) => {
     setLoading(true);
     setUsername(username);

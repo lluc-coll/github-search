@@ -7,6 +7,9 @@ interface Props {
   sidebar: boolean
 }
 
+// This component displays a list of similar users with their avatars and usernames.
+// It allows the user to select a user, which triggers a onUserSelect.
+// It is designed to be used in a sidebar or a full-width layout based on the `sidebar` prop.
 export default function UserItems({ otherUsers, onUserSelect, sidebar }: Props) {
 
   return (

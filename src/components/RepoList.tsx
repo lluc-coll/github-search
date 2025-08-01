@@ -8,15 +8,17 @@ interface Props {
     repos: Repo[];
 }
 
+// RepoList component to display a list of repositories with search and filter functionality
+// It allows users to search by repository name and filter by programming language
 export default function RepoList({ repos }: Props) {
-    const [filteredRepos, setFilteredRepos] = useState<Repo[]>(repos);
+    const [filteredRepos, setFilteredRepos] = useState<Repo[]>(repos); // Initialize with all repos
 
-    const [searchTerm, setSearchTerm] = useState("")
-    const [selectedLanguage, setSelectedLanguage] = useState("")
+    const [searchTerm, setSearchTerm] = useState("") // State for search term
+    const [selectedLanguage, setSelectedLanguage] = useState("") // State for selected programming language
 
-    // Get unique languages from repos
-    const languages = Array.from(new Set(repos.map((repo) => repo.language).filter(Boolean))).sort()
+    const languages = Array.from(new Set(repos.map((repo) => repo.language).filter(Boolean))).sort() // Get unique languages from repos
 
+    // Function to apply search and filter criteria
     const applyFilters = () => {
         let filtered = [...repos]
 

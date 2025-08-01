@@ -6,6 +6,8 @@ interface Props {
   onSearch: (username: string) => void;
 }
 
+// Simple search form component, when the search is submitted, it calls the onSearch function with the username.
+// CurrentUser is used to maintain the state of the input field if the user changes.
 export default function SearchForm({ currentUser, onSearch }: Props) {
 
   useEffect(() => {
