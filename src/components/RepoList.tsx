@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Repo } from "../types/Repo";
 import RepoItem from "./RepoItem";
-import { Filter, Search, X } from "lucide-react";
+import { Search } from "lucide-react";
 
 
 interface Props {
